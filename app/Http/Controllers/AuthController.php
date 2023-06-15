@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OtpRequest;
 use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,12 +18,19 @@ class AuthController extends Controller
         $validatedData = $request->validate([
             'phone' => 'required|string|unique:users',
             'code' => 'required|string'
+        ],
+        [
+            'phone.required' => 'Telefon nömrənizi daxil edin.',
+            'code.required' => 'SMS vasitəsi ilə gələn təsdiq kodunuzu daxil edin.',
+            'phone.unique' => 'Telefon nömrənisi hal-hazırda bazada mövcuddur.',
         ]);
 
-        if (Otp::query()->where([
-            'phone' => $validatedData['phone'],
-            'code' => $validatedData['code'],
-        ])->exists())
+        $checkOTP = Otp::query()
+            ->where(['phone' => $validatedData['phone'],'code' => $validatedData['code']])
+            ->orderByDesc('created_at')
+            ->first();
+
+        if ($checkOTP && Carbon::parse($checkOTP->created_at)->diffInMinutes(Carbon::now()) <= 3)
         {
             $user = User::create([
                 'name' => 'test',
@@ -45,14 +54,20 @@ class AuthController extends Controller
 
 
     }
-    public function login(Request $request)
+    public function login(OtpRequest $request)
     {
-        $credentials = $request->only('phone', 'password');
-        if (Auth::attempt($credentials)) {
-            $user = $request->user();
+        $credentials = [
+            'phone' => $request->input('phone'),
+        ];
+
+        $user = User::where('phone', $credentials['phone'])->first();
+
+        if ($user) {
+            Auth::login($user);
             $token = $user->createToken('api-token')->plainTextToken;
             return ['token' => $token];
         }
+
         return response()->json(['message' => 'Unauthorized'], 401);
     }
 }

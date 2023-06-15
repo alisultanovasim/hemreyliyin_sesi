@@ -12,19 +12,29 @@ class OtpController extends Controller
 {
     public function sendOtp(OtpRequest $request)
     {
-        $randomCode = rand(1000, 9999);
-        SendSMS::send($request->phone,$randomCode);
+        try {
+            $randomCode = rand(1000, 9999);
+            SendSMS::send($request->phone, $randomCode);
 
-        Otp::query()->create([
-           'phone' => $request->phone,
-           'code'  => $randomCode
-        ]);
+            Otp::create([
+                'phone' => $request->phone,
+                'code' => $randomCode
+            ]);
 
-        return response()->json(['status'=>'success','OTPcode'=>$randomCode,'message'=>'Təsdiq kodu nömrəyə göndərildi.'],Response::HTTP_OK);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Təsdiq kodu nömrəyə göndərildi.',
+                'data' => [
+                    'OTPcode' => $randomCode
+                ]
+            ], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'error' => $e,
+                'message' => 'Failed to send OTP. Please try again later.'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function checkOTP(Request $request)
-    {
-//        if ($request->code)
-    }
 }
