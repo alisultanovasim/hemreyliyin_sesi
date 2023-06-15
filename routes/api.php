@@ -26,8 +26,7 @@ Route::post('/register', [\App\Http\Controllers\AuthController::class,'register'
 Route::post('/login',[\App\Http\Controllers\AuthController::class,'login']);
 
 Route::middleware('auth:sanctum')->group(function (){
-    Route::get('testAuth',function (){
-        return 'testAuth';
-    });
+    Route::post('set-info',[\App\Http\Controllers\OperationController::class,'setInfo']);
+    Route::post('set-voice',[\App\Http\Controllers\OperationController::class,'setVoice']);
 });
 

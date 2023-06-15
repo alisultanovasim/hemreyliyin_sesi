@@ -34,7 +34,10 @@ class AuthController extends Controller
         {
             $user = User::create([
                 'name' => 'test',
+                'surname' => 'test',
                 'email' => 'test',
+                'gender' => 1,
+                'birthday' => '2023-06-14 10:36:41',
                 'password' => 'test',
                 'phone' => $validatedData['phone']
             ]);
