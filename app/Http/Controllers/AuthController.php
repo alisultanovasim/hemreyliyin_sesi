@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -32,10 +33,20 @@ class AuthController extends Controller
 
         if ($checkOTP && Carbon::parse($checkOTP->created_at)->diffInMinutes(Carbon::now()) <= 3)
         {
+
+            $randomString = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'), 0, 10);
+            $timestamp = time();
+            $email = $randomString . $timestamp . '@example.com';
+            $existingEmail = User::where('email', $email)->exists();
+
+            if ($existingEmail) {
+                $email = $randomString . $timestamp . '2@example.com';
+            }
+
             $user = User::create([
                 'name' => 'test',
                 'surname' => 'test',
-                'email' => 'test',
+                'email' => $email,
                 'gender' => 1,
                 'birthday' => '2023-06-14 10:36:41',
                 'password' => 'test',

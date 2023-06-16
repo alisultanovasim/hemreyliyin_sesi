@@ -32,7 +32,7 @@ class OtpController extends Controller
             return response()->json([
                 'status' => 'error',
                 'error' => $e,
-                'message' => 'Failed to send OTP. Please try again later.'
+                'message' => 'Problem yarandı.Biraz sonra yenidən sınayın.'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
