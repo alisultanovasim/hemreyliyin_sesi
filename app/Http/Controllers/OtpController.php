@@ -14,7 +14,7 @@ class OtpController extends Controller
     {
         try {
             $randomCode = rand(1000, 9999);
-            SendSMS::send($request->phone, $randomCode);
+            SendSMS::send($request->phone, 'Sizin hemreylik kodunuz: '.$randomCode);
 
             Otp::create([
                 'phone' => $request->phone,
