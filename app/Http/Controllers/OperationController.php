@@ -47,6 +47,7 @@ class OperationController extends Controller
 
     public function setVoice(Request $request)
     {
+        dd(Auth::user());
         $this->validate($request,[
            'voice' => 'required'
         ]);
@@ -58,7 +59,7 @@ class OperationController extends Controller
         $user = Auth::user();
         $user->voice()->save($voiceModel);
 
-        return response()->json(['message' => 'Səs qeydə alınıb və uğurla saxlanılıb']);
+        return response()->json(['message' => 'Səs qeydə alınıb və uğurla saxlanılıb','status'=>'success']);
 
     }
 }
