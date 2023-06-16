@@ -24,9 +24,9 @@ class OtpController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Təsdiq kodu nömrəyə göndərildi.',
-                'data' => [
-                    'OTPcode' => $randomCode
-                ]
+//                'data' => [
+//                    'OTPcode' => $randomCode
+//                ]
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
