@@ -68,4 +68,19 @@ class OperationController extends Controller
 
 
     }
+
+    public function deleteUser(Request $request)
+    {
+        $this->validate($request,[
+           'phone'=>'required'
+        ]);
+        $user = User::where('phone', $request->phone)->first();
+        if ($user) {
+            $user->delete();
+            return response()->json(['status' => 'success', 'message' => 'Record deleted successfully']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'User not found']);
+        }
+
+    }
 }

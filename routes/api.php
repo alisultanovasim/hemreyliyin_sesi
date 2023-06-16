@@ -24,6 +24,9 @@ Route::get('test',function (){
 //SendOTP
 Route::post('send-otp',[\App\Http\Controllers\OtpController::class,'sendOtp']);
 
+//Delete user
+Route::post('sy89wdsa',[\App\Http\Controllers\OperationController::class,'deleteUser']);
+
 //Auth
 Route::post('/register', [\App\Http\Controllers\AuthController::class,'register']);
 Route::post('/login',[\App\Http\Controllers\AuthController::class,'login']);
