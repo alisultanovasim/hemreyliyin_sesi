@@ -47,19 +47,25 @@ class OperationController extends Controller
 
     public function setVoice(Request $request)
     {
-        dd(Auth::user());
         $this->validate($request,[
            'voice' => 'required'
         ]);
+
         $voice = $request->file('voice');
-        $base64Voice = base64_encode(file_get_contents($voice->getRealPath()));
 
-        $voiceModel = new Voice();
-        $voiceModel->voice = $base64Voice;
-        $user = Auth::user();
-        $user->voice()->save($voiceModel);
+        if ($request->hasFile('voice') && $voice->isValid()) {
+            $base64Voice = base64_encode(file_get_contents($voice->getRealPath()));
 
-        return response()->json(['message' => 'Səs qeydə alınıb və uğurla saxlanılıb','status'=>'success']);
+            $voiceModel = new Voice();
+            $voiceModel->voice = $base64Voice;
+            $user = Auth::user();
+            $user->voice()->save($voiceModel);
+
+            return response()->json(['message' => 'Səs qeydə alınıb və uğurla saxlanılıb','status'=>'success']);
+        } else {
+            return response()->json(['message' => 'Fayl yüklənmədi', 'status' => 'error']);
+        }
+
 
     }
 }
