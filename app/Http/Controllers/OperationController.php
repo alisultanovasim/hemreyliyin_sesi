@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Voice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,39 +34,35 @@ class OperationController extends Controller
         User::query()
             ->wherePhone($validatedData['phone'])
             ->update([
-            'name' => $name,
-            'surname' => $surname,
-            'birthday' => $birthday,
-            'gender' => $gender,
-        ]);
+                'name' => $name,
+                'surname' => $surname,
+                'birthday' => $birthday,
+                'gender' => $gender,
+            ]);
 
         return response()->json([
             'message' => 'İstifadəçi məlumatı uğurla yadda saxlanıldı.',
             'status' => 'success',
-        ],Response::HTTP_CREATED);
+        ], Response::HTTP_CREATED);
     }
 
     public function setVoice(Request $request)
     {
-        $this->validate($request,[
-           'voice' => 'required'
+        $this->validate($request, [
+            'voice' => 'required|file|mimes:aac,flac,m4a,mp2,mp3,ogg,opus,wav,wma'
         ]);
 
-        $voice = $request->file('voice');
+        $voiceFile = $request->file('voice');
+        $filename = uniqid() . '.' . $voiceFile->getClientOriginalExtension();
+        Storage::disk('public')->put($filename, file_get_contents($voiceFile));
 
-        if ($request->hasFile('voice') && $voice->isValid()) {
-            $base64Voice = base64_encode(file_get_contents($voice->getRealPath()));
 
-            $voiceModel = new Voice();
-            $voiceModel->voice = $base64Voice;
-            $user = Auth::user();
-            $user->voice()->save($voiceModel);
+        $voiceModel = new Voice();
+        $voiceModel->voice = $voiceFile;
+        $user = auth()->user();
+        $user->voice()->save($voiceModel);
 
-            return response()->json(['message' => 'Səs qeydə alınıb və uğurla saxlanılıb','status'=>'success']);
-        } else {
-            return response()->json(['message' => 'Fayl yüklənmədi', 'status' => 'error']);
-        }
-
+        return response()->json(['message' => 'Səs qeydə alınıb və uğurla saxlanılıb', 'status' => 'success']);
 
     }
 

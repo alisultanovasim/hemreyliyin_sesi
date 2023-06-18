@@ -37,7 +37,7 @@ class AuthController extends Controller
             $randomString = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'), 0, 10);
             $timestamp = time();
             $email = $randomString . $timestamp . '@example.com';
-            $existingEmail = User::where('email', $email)->exists();
+            $existingEmail = User::query()->where('email', $email)->exists();
 
             if ($existingEmail) {
                 $email = $randomString . $timestamp . '2@example.com';
