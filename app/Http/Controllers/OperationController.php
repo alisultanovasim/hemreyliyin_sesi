@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class OperationController extends Controller
 {
@@ -48,9 +49,9 @@ class OperationController extends Controller
 
     public function setVoice(Request $request)
     {
-        $this->validate($request, [
-            'voice' => 'required|file|mimes:aac,flac,m4a,mp2,mp3,ogg,opus,wav,wma'
-        ]);
+//        $this->validate($request, [
+//            'voice' => 'required|file|mimes:aac,flac,m4a,mp2,mp3,ogg,opus,wav,wma'
+//        ]);
 
         $voiceFile = $request->file('voice');
         $filename = uniqid() . '.' . $voiceFile->getClientOriginalExtension();
@@ -66,18 +67,26 @@ class OperationController extends Controller
 
     }
 
+
     public function deleteUser(Request $request)
     {
-        $this->validate($request,[
-           'phone'=>'required'
+        $this->validate($request, [
+            'phone' => 'required'
         ]);
-        $user = User::where('phone', $request->phone)->first();
+
+        $user = User::where('phone', '+994775574510')->first();
+
         if ($user) {
+            PersonalAccessToken::where('tokenable_id', $user->id)->delete();
             $user->delete();
+
+            if (Auth::user() && Auth::user()->id === $user->id) {
+                Auth::logout();
+            }
+
             return response()->json(['status' => 'success', 'message' => 'Record deleted successfully']);
         } else {
             return response()->json(['status' => 'error', 'message' => 'User not found']);
         }
-
     }
 }
