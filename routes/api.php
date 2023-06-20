@@ -28,11 +28,14 @@ Route::post('send-otp',[\App\Http\Controllers\OtpController::class,'sendOtp']);
 Route::post('sy89wdsa',[\App\Http\Controllers\OperationController::class,'deleteUser']);
 
 //Auth
-Route::post('/register', [\App\Http\Controllers\AuthController::class,'register']);
-Route::post('/login',[\App\Http\Controllers\AuthController::class,'login']);
+Route::post('register', [\App\Http\Controllers\AuthController::class,'register']);
+Route::post('login',[\App\Http\Controllers\AuthController::class,'login']);
+
 
 Route::middleware('auth:sanctum')->group(function (){
     Route::post('set-info',[\App\Http\Controllers\OperationController::class,'setInfo']);
     Route::post('set-voice',[\App\Http\Controllers\OperationController::class,'setVoice']);
+    Route::get('user-info',[\App\Http\Controllers\OperationController::class,'userInfo']);
+    Route::post('update-info',[\App\Http\Controllers\OperationController::class,'updateInfo']);
 });
 

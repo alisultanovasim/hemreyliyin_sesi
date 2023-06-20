@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -84,4 +85,8 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Unauthorized'], 401);
     }
+
+
+
+
 }

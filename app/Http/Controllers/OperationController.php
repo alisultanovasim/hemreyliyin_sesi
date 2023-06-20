@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Laravel\Sanctum\PersonalAccessToken;
 
@@ -47,11 +48,16 @@ class OperationController extends Controller
         ], Response::HTTP_CREATED);
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function setVoice(Request $request)
     {
-//        $this->validate($request, [
-//            'voice' => 'required|file|mimes:aac,flac,m4a,mp2,mp3,ogg,opus,wav,wma'
-//        ]);
+        $this->validate($request, [
+            'voice' => 'required|file|mimes:aac,flac,m4a,mp2,mp3,ogg,opus,wav,wma'
+        ]);
+        //flac,mp2,m4a,opus,wav,wma
+//        dd($request->file('voice'));
 
         $voiceFile = $request->file('voice');
         $filename = uniqid() . '.' . $voiceFile->getClientOriginalExtension();
@@ -88,5 +94,44 @@ class OperationController extends Controller
         } else {
             return response()->json(['status' => 'error', 'message' => 'User not found']);
         }
+    }
+    public function userInfo()
+    {
+        return response()->json(['status'=>'success','data'=>Auth::user()],Response::HTTP_OK);
+    }
+
+    public function updateInfo(Request $request)
+    {
+        $this->validate($request,[
+            'name' => 'nullable|string|max:255',
+            'surname' => 'nullable|string|max:255',
+            'birthday' => 'nullable|date',
+            'gender' => ['nullable', Rule::in([0, 1])],
+            'phone' => [
+                'required',
+                'string',
+                'regex:/^(\+994|0)(50|51|55|70|77)(\d{7})$/'
+            ],
+        ]);
+
+//        dd($request->name);
+
+        User::query()
+            ->where('phone', Auth::user()->phone)
+            ->when([$request->has('name'), function ($query) use ($request) {
+                return $query->update(['name' => $request->name]);
+            },
+                $request->has('surname'), function ($query) use ($request) {
+                    return $query->update(['surname' => $request->surname]);
+                },
+                $request->has('birthday'), function ($query) use ($request) {
+                    return $query->update(['birthday' => $request->birthday]);
+                },
+                $request->has('gender'), function ($query) use ($request) {
+                    return $query->update(['gender' => $request->gender]);
+                }
+            ]);
+
+        return response()->json(['status'=>'success','message'=>'Məlumatlar uğurla yeniləndi.'],Response::HTTP_OK);
     }
 }
