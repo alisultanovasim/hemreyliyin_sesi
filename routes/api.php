@@ -37,5 +37,7 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::post('set-voice',[\App\Http\Controllers\OperationController::class,'setVoice']);
     Route::get('user-info',[\App\Http\Controllers\OperationController::class,'userInfo']);
     Route::post('update-info',[\App\Http\Controllers\OperationController::class,'updateInfo']);
+    Route::post('create-partner',[\App\Http\Controllers\OperationController::class,'createPartner']);
+    Route::get('get-all-partners',[\App\Http\Controllers\OperationController::class,'getAllPartners']);
 });
 

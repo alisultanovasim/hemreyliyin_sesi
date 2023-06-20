@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Partner;
 use App\Models\User;
 use App\Models\Voice;
 use Illuminate\Http\Request;
@@ -134,4 +135,32 @@ class OperationController extends Controller
 
         return response()->json(['status'=>'success','message'=>'Məlumatlar uğurla yeniləndi.'],Response::HTTP_OK);
     }
+
+    public function createPartner(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $logoFile = $request->file('logo');
+        $logoFilename = uniqid() . '.' . $logoFile->getClientOriginalExtension();
+        $logoFile->storeAs('public/partner_logos', $logoFilename);
+
+        $partner = new Partner();
+        $partner->name = $validatedData['name'];
+        $partner->logo = $logoFilename;
+        $partner->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Tərəfdaş uğurla yaradıldı']);
+    }
+    public function getAllPartners()
+    {
+        // Retrieve all partners from the database
+        $partners = Partner::all();
+
+        // Return the partners as a JSON response
+        return response()->json(['status' => 'success', 'partners' => $partners]);
+    }
+
 }
