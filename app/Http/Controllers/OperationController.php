@@ -81,7 +81,7 @@ class OperationController extends Controller
             'phone' => 'required'
         ]);
 
-        $user = User::where('phone', '+994775574510')->first();
+        $user = User::query()->where('phone', $request->phone)->first();
 
         if ($user) {
             PersonalAccessToken::where('tokenable_id', $user->id)->delete();
