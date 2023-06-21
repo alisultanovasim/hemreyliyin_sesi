@@ -54,9 +54,9 @@ class OperationController extends Controller
      */
     public function setVoice(Request $request)
     {
-        $this->validate($request, [
-            'voice' => 'required|file|mimes:aac,flac,m4a,mp2,mp3,ogg,opus,wav,wma'
-        ]);
+//        $this->validate($request, [
+//            'voice' => 'required|file|mimes:aac,flac,m4a,mp2,mp3,ogg,opus,wav,wma'
+//        ]);
         //flac,mp2,m4a,opus,wav,wma
 //        dd($request->file('voice'));
 
