@@ -152,7 +152,7 @@ class OperationController extends Controller
         $partner->logo = asset('storage/partner_logos/' . $logoFilename);
         $partner->save();
 
-        return response()->json(['status' => 'success', 'message' => 'Tərəfdaş uğurla yaradıldı']);
+        return response()->json(['status' => 'success', 'message' => 'Tərəfdaş uğurla yaradıldı','logo'=>$partner->logo]);
     }
 
     public function getAllPartners()
