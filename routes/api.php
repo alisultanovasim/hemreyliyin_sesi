@@ -39,5 +39,6 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::post('update-info',[\App\Http\Controllers\OperationController::class,'updateInfo']);
     Route::post('create-partner',[\App\Http\Controllers\OperationController::class,'createPartner']);
     Route::get('get-all-partners',[\App\Http\Controllers\OperationController::class,'getAllPartners']);
+    Route::get('get-reyting',[\App\Http\Controllers\OperationController::class,'getReyting']);
 });
 

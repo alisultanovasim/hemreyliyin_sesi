@@ -164,4 +164,9 @@ class OperationController extends Controller
         return response()->json(['status' => 'success', 'partners' => $partners]);
     }
 
+    public function getReyting()
+    {
+        return response()->json(['status'=>'success','reyting'=>User::count()]);
+    }
+
 }
