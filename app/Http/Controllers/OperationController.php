@@ -157,16 +157,13 @@ class OperationController extends Controller
 
     public function getAllPartners()
     {
-        // Retrieve all partners from the database
         $partners = Partner::all();
-
-        // Return the partners as a JSON response
         return response()->json(['status' => 'success', 'partners' => $partners]);
     }
 
     public function getReyting()
     {
-        return response()->json(['status'=>'success','reyting'=>User::count()]);
+        return response()->json(['status'=>'success','rating'=>User::count()]);
     }
 
 }
