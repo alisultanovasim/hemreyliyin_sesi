@@ -145,15 +145,15 @@ class OperationController extends Controller
 
         $logoFile = $request->file('logo');
         $logoFilename = uniqid() . '.' . $logoFile->getClientOriginalExtension();
-        $logoFile->storeAs('public/partner_logos', $logoFilename);
-
+        $logoFile->move(public_path('logos'), $logoFilename);
         $partner = new Partner();
         $partner->name = $validatedData['name'];
-        $partner->logo = asset('storage/partner_logos/' . $logoFilename);
-        $partner->save();
+        $partner->logo = url('logos/' . $logoFilename);
 
+        $partner->save();
         return response()->json(['status' => 'success', 'message' => 'Tərəfdaş uğurla yaradıldı','logo'=>$partner->logo]);
     }
+
 
     public function getAllPartners()
     {
