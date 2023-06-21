@@ -91,9 +91,9 @@ class OperationController extends Controller
                 Auth::logout();
             }
 
-            return response()->json(['status' => 'success', 'message' => 'Record deleted successfully']);
+            return response()->json(['status' => 'success', 'message' => 'İstifadəçi uğurla silindi.']);
         } else {
-            return response()->json(['status' => 'error', 'message' => 'User not found']);
+            return response()->json(['status' => 'error', 'message' => 'İstifadəçi tapılmadı.']);
         }
     }
     public function userInfo()
@@ -149,11 +149,12 @@ class OperationController extends Controller
 
         $partner = new Partner();
         $partner->name = $validatedData['name'];
-        $partner->logo = $logoFilename;
+        $partner->logo = asset('storage/partner_logos/' . $logoFilename);
         $partner->save();
 
         return response()->json(['status' => 'success', 'message' => 'Tərəfdaş uğurla yaradıldı']);
     }
+
     public function getAllPartners()
     {
         // Retrieve all partners from the database
