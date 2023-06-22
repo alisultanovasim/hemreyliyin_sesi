@@ -66,8 +66,8 @@ class OperationController extends Controller
 
         $voiceModel = new Voice();
         $voiceModel->voice = $voiceFile;
-//        $voiceModel->name = $filename;
-//        $voiceModel->format = $format;
+        $voiceModel->name = $filename;
+        $voiceModel->format = $format;
         $user = auth()->user();
         $user->voice()->save($voiceModel);
 

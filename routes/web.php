@@ -25,8 +25,13 @@ Route::get('test',function (){
 Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class,'loginForm']);
 Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class,'login'])->name('login');
 
-Route::middleware('auth')->get('/voices', [\App\Http\Controllers\Auth\LoginController::class,'voices'])->name('voices');
-Route::middleware('auth')->get('/admin', [\App\Http\Controllers\Auth\LoginController::class,'admin'])->name('admin');
-
+Route::middleware('auth')->group(function () {
+    Route::get('/', [\App\Http\Controllers\AdminController::class,'home'])->name('home');
+    Route::get('/voices', [\App\Http\Controllers\AdminController::class,'voices'])->name('voices');
+    Route::get('/users-has-record', [\App\Http\Controllers\AdminController::class,'usersHasRecord'])->name('users-has-record');
+    Route::get('/users-has-no-record', [\App\Http\Controllers\AdminController::class,'usersHasNoRecord'])->name('users-has-no-record');
+    Route::get('/users', [\App\Http\Controllers\AdminController::class,'usersHasRecord'])->name('users');
+    Route::get('/logout', [\App\Http\Controllers\Auth\LoginController::class,'logout'])->name('logout');
+});
 
 

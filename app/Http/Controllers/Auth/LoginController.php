@@ -27,14 +27,12 @@ public function login(Request $request)
     return redirect()->back()->with('error', 'Invalid login credentials');
 }
 
-    public function voices()
+    public function logout(Request $request)
     {
-        $voices = Voice::query()->with(['user:id,name,surname'])->get();
-        return view('voices',compact('voices'));
-    }
-    public function admin()
-    {
-        return view('admin');
+        Auth::logout();
+
+        return redirect()->route('login')->with('success', 'Logged out successfully');
+
     }
 
 }
