@@ -108,11 +108,11 @@ class OperationController extends Controller
             'surname' => 'nullable|string|max:255',
             'birthday' => 'nullable|date',
             'gender' => ['nullable', Rule::in([0, 1])],
-            'phone' => [
-                'required',
-                'string',
-                'regex:/^(\+994|0)(50|51|55|70|77)(\d{7})$/'
-            ],
+//            'phone' => [
+//                'required',
+//                'string',
+//                'regex:/^(\+994|0)(50|51|55|70|77)(\d{7})$/'
+//            ],
         ]);
 
 //        dd($request->name);
