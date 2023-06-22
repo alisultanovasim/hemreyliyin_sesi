@@ -115,23 +115,22 @@ class OperationController extends Controller
 //            ],
         ]);
 
-//        dd($request->name);
+//        dd(User::query()->wherePhone(Auth::user()->phone)->first());
 
-        User::query()
-            ->where('phone', Auth::user()->phone)
-            ->when([$request->has('name'), function ($query) use ($request) {
-                return $query->update(['name' => $request->name]);
-            },
-                $request->has('surname'), function ($query) use ($request) {
-                    return $query->update(['surname' => $request->surname]);
-                },
-                $request->has('birthday'), function ($query) use ($request) {
-                    return $query->update(['birthday' => $request->birthday]);
-                },
-                $request->has('gender'), function ($query) use ($request) {
-                    return $query->update(['gender' => $request->gender]);
-                }
-            ]);
+        $user = User::query()
+            ->where('phone', Auth::user()->phone);
+        if ($request->has('name')){
+            $user->update(['name' => $request->name]);
+        }
+        if ($request->has('surname')){
+            $user->update(['surname' => $request->surname]);
+        }
+        if ($request->has('birthday')){
+            $user->update(['birthday' => $request->birthday]);
+        }
+        if ($request->has('gender')){
+            $user->update(['gender' => $request->gender]);
+        }
 
         return response()->json(['status'=>'success','message'=>'Məlumatlar uğurla yeniləndi.'],Response::HTTP_OK);
     }
