@@ -19,3 +19,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('test',function (){
     return 'checkme';
 });
+
+// routes/web.php
+
+Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class,'loginForm']);
+Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class,'login'])->name('login');
+
+Route::middleware('auth')->get('/voices', [\App\Http\Controllers\Auth\LoginController::class,'voices'])->name('voices');
+Route::middleware('auth')->get('/admin', [\App\Http\Controllers\Auth\LoginController::class,'admin'])->name('admin');
+
+
+

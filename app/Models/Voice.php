@@ -11,7 +11,9 @@ class Voice extends Model
     use HasFactory,SoftDeletes;
     protected $fillable=[
       'user_id',
-      'voice'
+      'voice',
+      'name',
+      'format',
     ];
 
     public function user()

@@ -57,16 +57,17 @@ class OperationController extends Controller
 //        $this->validate($request, [
 //            'voice' => 'required|file|mimes:aac,flac,m4a,mp2,mp3,ogg,opus,wav,wma'
 //        ]);
-        //flac,mp2,m4a,opus,wav,wma
-//        dd($request->file('voice'));
 
         $voiceFile = $request->file('voice');
+        $format = $voiceFile->getClientOriginalExtension();
         $filename = uniqid() . '.' . $voiceFile->getClientOriginalExtension();
-        Storage::disk('public')->put($filename, file_get_contents($voiceFile));
+        Storage::disk('public')->put('voices/'.$filename, file_get_contents($voiceFile));
 
 
         $voiceModel = new Voice();
         $voiceModel->voice = $voiceFile;
+        $voiceModel->name = $filename;
+        $voiceModel->format = $format;
         $user = auth()->user();
         $user->voice()->save($voiceModel);
 
