@@ -1,5 +1,12 @@
 @extends('dashboard')
-@section('content')
+@section('content')'
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    canvas {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+</style>
     <main class="py-6 bg-surface-secondary">
         <div class="container-fluid">
             <!-- Card stats -->
@@ -73,17 +80,18 @@
                     </div>
                 </div>
             </div>
-            <div class="card shadow border-0 mb-7">
+            <canvas id="eventChart" style="width: 500px;height: 500px"></canvas>
+            <div class="card shadow border-0 mt-10">
                 <div class="card-header">
-                    <h5 class="mb-0">Yeni qoşulanlar</h5>
+                    <h5 class="mb-0 text-center">Yeni qoşulanlar</h5>
                 </div>
-                <div class="table-responsive">
+                <div class="table">
                     <table class="table table-hover table-nowrap">
                         <thead class="thead-light">
                         <tr>
-                            <th scope="col">Ad,soy ad</th>
-                            <th scope="col">Tarix</th>
-                            <th scope="col">Nömrə</th>
+                            <th scope="col" class="text-center">Ad,soy ad</th>
+                            <th scope="col" class="text-center">Tarix</th>
+                            <th scope="col" class="text-center">Nömrə</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -96,10 +104,10 @@
                                         {{$user->name.' '.$user->surname}}
                                     </a>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     {{\Illuminate\Support\Carbon::parse($user->created_at)->format('d-m-Y')}}
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <a class="text-heading font-semibold" href="#">
                                         {{$user->phone}}
                                     </a>
@@ -113,4 +121,39 @@
             </div>
         </div>
     </main>
+<script>
+    var ctx = document.getElementById('eventChart').getContext('2d');
+    var allMonths = @json($allMonths);
+
+    var monthLabels = allMonths.map(function (data) {
+        return data.month;
+    });
+
+    var userCounts = allMonths.map(function (data) {
+        return data.count;
+    });
+
+    var eventChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: monthLabels,
+            datasets: [{
+                label: 'Qoşulan istifadəçilər',
+                data: userCounts,
+                fill: false,
+                borderColor: 'rgb(203,23,23)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    stepSize: 1
+                }
+            }
+        }
+    });
+</script>
+
 @endsection

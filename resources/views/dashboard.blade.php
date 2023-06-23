@@ -5,6 +5,9 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
     <title>Document</title>
     <style>
 
@@ -81,6 +84,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('voices')}}">
                             <i class="bi bi-bar-chart"></i> Qeyd edilən səslər
+                            <span class="badge bg-soft-primary text-primary rounded-pill d-inline-flex align-items-center ms-auto">{{$allRecord}}</span>
                         </a>
                     </li>
 {{--                        <li class="nav-item">--}}
@@ -92,11 +96,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('users-has-record')}}">
                             <i class="bi bi-people"></i> İştirak edənlər
+                            <span class="badge bg-soft-primary text-primary rounded-pill d-inline-flex align-items-center ms-auto">{{$hasRecord}}</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('users-has-no-record')}}">
                             <i class="bi bi-person-x-fill"></i>İştirak etməyənlər
+                            <span class="badge bg-soft-primary text-primary rounded-pill d-inline-flex align-items-center ms-auto">{{$hasNoRecord}}</span>
+
                         </a>
                     </li>
 
@@ -133,17 +140,17 @@
                         <!-- Actions -->
                         <div class="col-sm-6 col-12 text-sm-end">
                             <div class="mx-n1">
-                                <a href="#" class="btn d-inline-flex btn-sm btn-neutral border-base mx-1">
+{{--                                <a href="#" class="btn d-inline-flex btn-sm btn-neutral border-base mx-1">--}}
+{{--                                    <span class=" pe-2">--}}
+{{--                                        <i class="bi bi-pencil"></i>--}}
+{{--                                    </span>--}}
+{{--                                    <span>Edit</span>--}}
+{{--                                </a>--}}
+                                <a href="{{route('logout')}}" class="btn d-inline-flex btn-sm btn-danger mx-1">
                                     <span class=" pe-2">
-                                        <i class="bi bi-pencil"></i>
+                                        Çıxış et
+                                        <i class="bi bi-box-arrow-right"></i>
                                     </span>
-                                    <span>Edit</span>
-                                </a>
-                                <a href="#" class="btn d-inline-flex btn-sm btn-primary mx-1">
-                                    <span class=" pe-2">
-                                        <i class="bi bi-plus"></i>
-                                    </span>
-                                    <span>Create</span>
                                 </a>
                             </div>
                         </div>

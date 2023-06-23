@@ -47,7 +47,7 @@
 
 </style>
 <body>
-<div style="margin-top: 50px;width: 300px;padding: 10px;background-color: #d3891a" class="container">
+<div style="margin-top: 50px;width: 300px;padding: 10px;background-color: #adb4ce;border-radius: 5px" class="container">
     <form action="{{ route('login') }}" method="POST">
         @csrf
         <input type="email" name="email" placeholder="Email">

@@ -22,7 +22,7 @@ public function login(Request $request)
     ]);
 
     if (Auth::attempt($credentials)) {
-        return redirect()->route('admin');
+        return redirect()->route('home');
     }
     return redirect()->back()->with('error', 'Invalid login credentials');
 }

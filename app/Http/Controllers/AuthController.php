@@ -18,7 +18,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validatedData = $request->validate([
-            'phone' => 'required|string|unique:users',
+            'phone' => 'required|string',
             'code' => 'required|string'
         ],
         [
@@ -26,6 +26,12 @@ class AuthController extends Controller
             'code.required' => 'SMS vasitəsi ilə gələn təsdiq kodunuzu daxil edin.',
             'phone.unique' => 'Telefon nömrənisi hal-hazırda bazada mövcuddur.',
         ]);
+
+        $user = User::query()->where('phone',$request->phone)->first();
+        if ($user){
+            $token = $user->createToken('api-token')->plainTextToken;
+            return ['token' => $token];
+        }
 
         $checkOTP = Otp::query()
             ->where(['phone' => $validatedData['phone'],'code' => $validatedData['code']])

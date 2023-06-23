@@ -16,7 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade');
-            $table->string('voice');
+            $table->string('voice',255);
+            $table->string('name',255);
+            $table->string('format',55);
             $table->softDeletes();
             $table->timestamps();
         });

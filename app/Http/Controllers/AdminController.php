@@ -9,6 +9,7 @@ use App\Models\Voice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -18,12 +19,23 @@ class AdminController extends Controller
 {
     public function home()
     {
+        $monthlyCounts = User::query()
+            ->select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as count'))
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $allMonths = [];
+
+        foreach (range(1, 12) as $month) {
+            $count = $monthlyCounts->where('month', $month)->pluck('count')->first() ?? 0;
+            $allMonths[] = [
+                'month' => $month,
+                'count' => $count,
+            ];
+        }
         $lastUsers = User::query()->latest()->get();
-        $allUsers = User::query()->count();
-        $hasRecord = User::query()->has('voice')->count();
-        $hasNoRecord = User::query()->doesntHave('voice')->count();
-        $allRecord = Voice::query()->count();
-        return view('home',compact('allRecord','hasRecord','hasNoRecord','allUsers','lastUsers'));
+        return view('home',compact('lastUsers','monthlyCounts','allMonths'));
     }
     public function voices()
     {
@@ -33,13 +45,15 @@ class AdminController extends Controller
 
     public function usersHasRecord()
     {
+        $header = 'İştirak edən istifadəçilər';
         $users = User::query()->has('voice')->get();
-        return view('users',compact('users'));
+        return view('users',compact('users','header'));
     }
     public function usersHasNoRecord()
     {
+        $header = 'İştirak etməyən istifadəçilər';
         $users = User::query()->doesntHave('voice')->get();
-        return view('users',compact('users'));
+        return view('users',compact('users','header'));
     }
 
 }
